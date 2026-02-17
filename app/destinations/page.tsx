@@ -2,10 +2,10 @@
 
 import { destinations } from "@/data/destinations"
 import { useSearchParams } from "next/navigation"
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, Suspense } from "react"
 import Link from "next/link"
 
-export default function Destinations() {
+function DestinationsContent() {
   const searchParams = useSearchParams()
   const searchQuery = searchParams.get("search") || ""
   const [query, setQuery] = useState(searchQuery)
@@ -55,7 +55,6 @@ export default function Destinations() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
-
       <div className={`fixed top-[80px] inset-x-0 z-40 transition-all duration-500 ${scrolled ? "bg-black/80 backdrop-blur-xl border-b border-white/10" : "bg-transparent"}`}>
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <h2 className="font-semibold tracking-wide">Discover</h2>
@@ -64,7 +63,6 @@ export default function Destinations() {
       </div>
 
       <section className="relative min-h-[90vh] flex items-center justify-center text-center overflow-hidden">
-
         {heroImages.map((img, index) => (
           <img
             key={img}
@@ -156,7 +154,14 @@ export default function Destinations() {
           </div>
         )}
       </section>
-
     </div>
+  )
+}
+
+export default function Destinations() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black" />}>
+      <DestinationsContent />
+    </Suspense>
   )
 }

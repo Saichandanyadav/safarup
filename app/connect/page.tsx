@@ -17,7 +17,7 @@ type Person = {
   destination: string
   date: string
   interests: string[]
-  gradient: string
+  gradient?: string
 }
 
 export default function Connect() {
@@ -35,18 +35,18 @@ export default function Connect() {
   }, [])
 
   useEffect(() => {
-    const storedAccepted = JSON.parse(localStorage.getItem("acceptedConnections") || "[]")
-    const storedDeclined = JSON.parse(localStorage.getItem("declinedConnections") || "[]")
+    const storedAccepted: Person[] = JSON.parse(localStorage.getItem("acceptedConnections") || "[]")
+    const storedDeclined: Person[] = JSON.parse(localStorage.getItem("declinedConnections") || "[]")
 
     setAccepted(storedAccepted)
     setDeclined(storedDeclined)
 
     const decidedIds = new Set([
-      ...storedAccepted.map((p: Person) => p.id),
-      ...storedDeclined.map((p: Person) => p.id)
+      ...storedAccepted.map((p) => p.id),
+      ...storedDeclined.map((p) => p.id)
     ])
 
-    const remaining = matchmakers.filter((p) => !decidedIds.has(p.id))
+    const remaining = (matchmakers as Person[]).filter((p) => !decidedIds.has(p.id))
     setRequests(remaining)
   }, [])
 
@@ -73,7 +73,7 @@ export default function Connect() {
     const y = useMotionValue(0)
     const rotate = useTransform(x, [-150, 150], [-10, 10])
 
-    const cardBg = useTransform([x, y], ([latestX, latestY]) => {
+    const cardBg = useTransform([x, y], ([latestX, latestY]: number[]) => {
       if (latestX > 80) return "#052e16"
       if (latestX < -80) return "#450a0a"
       if (latestY > 80) return "#0c4a6e"
@@ -121,7 +121,7 @@ export default function Connect() {
 
         <div>
           <div className="flex items-center gap-4">
-            <div className={`w-20 h-20 rounded-full bg-gradient-to-br ${person.gradient} flex items-center justify-center shadow-lg`}>
+            <div className={`w-20 h-20 rounded-full bg-gradient-to-br ${person.gradient || 'from-blue-500 to-purple-500'} flex items-center justify-center shadow-lg`}>
               <User className="text-white" size={32} />
             </div>
             <div>
@@ -166,7 +166,6 @@ export default function Connect() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white">
-
       <div className="relative h-[45vh] sm:h-[55vh] overflow-hidden">
         <img src="/connect-hero.png" alt="Connect Travelers" className="w-full h-full object-cover object-top scale-105" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-slate-950"></div>
@@ -181,7 +180,6 @@ export default function Connect() {
       </div>
 
       <div className="px-5 sm:px-6 py-12 max-w-7xl mx-auto">
-
         {!isLarge && (
           <>
             <div className="sticky top-0 z-20 bg-slate-950/80 backdrop-blur-xl border-b border-white/10 mb-8">
@@ -264,7 +262,6 @@ export default function Connect() {
             </div>
           </div>
         )}
-
       </div>
     </div>
   )
