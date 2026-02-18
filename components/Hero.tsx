@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+import { destinations } from "@/data/destinations"
 
 export default function Hero() {
   const router = useRouter()
@@ -16,14 +17,9 @@ export default function Hero() {
     { name: "Rohan Verma", text: "Clean design, powerful discovery engine, love it." }
   ]
 
-  const popularSearch = ["Goa", "Ladakh", "Jaipur", "Rishikesh", "Kerala"]
+  const popularSearch = ["Bodh Gaya", "Rajgir", "Patna", "Nalanda", "Gaya"]
 
-  const featured = [
-    { name: "Goa", img: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2" },
-    { name: "Manali", img: "https://images.unsplash.com/photo-1501785888041-af3ef285b470" },
-    { name: "Jaipur", img: "https://images.unsplash.com/photo-1603262110263-fb0112e7cc33" },
-    { name: "Kerala", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e" }
-  ]
+  const featured = destinations.slice(0, 8)
 
   const handleSearch = () => {
     if (!query.trim()) return
@@ -33,10 +29,10 @@ export default function Hero() {
   useEffect(() => {
     const interval = setInterval(() => {
       setStats(prev => ({
-        d: prev.d < 180 ? prev.d + 4 : 180,
-        t: prev.t < 30000 ? prev.t + 600 : 30000,
-        g: prev.g < 1000 ? prev.g + 15 : 1000,
-        r: prev.r < 49 ? prev.r + 1 : 49
+        d: prev.d < 25 ? prev.d + 1 : 25,
+        t: prev.t < 3000 ? prev.t + 60 : 3000,
+        g: prev.g < 150 ? prev.g + 3 : 150,
+        r: prev.r < 50 ? prev.r + 1 : 50
       }))
     }, 20)
     return () => clearInterval(interval)
@@ -52,58 +48,53 @@ export default function Hero() {
   useEffect(() => {
     const handleScroll = () => {
       const total = document.documentElement.scrollHeight - window.innerHeight
-      setScroll((window.scrollY / total) * 100)
+      const currentScroll = window.scrollY
+      setScroll((currentScroll / total) * 100)
     }
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
   return (
-    <div className="w-full overflow-hidden bg-white">
-
+    <div className="w-full overflow-hidden bg-white text-gray-900">
       <div
-        className="fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 z-50 transition-all duration-200"
+        className="fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 z-[100] transition-all duration-200"
         style={{ width: `${scroll}%` }}
       />
-
       <section className="relative min-h-[90vh] md:min-h-screen flex items-center justify-center px-5 md:px-6 bg-gradient-to-br from-sky-100 via-white to-blue-100">
-
-        <div className="absolute w-[400px] h-[400px] md:w-[500px] md:h-[500px] bg-blue-400/20 blur-3xl rounded-full -top-40 -left-40 animate-pulse" />
-        <div className="absolute w-[400px] h-[400px] md:w-[500px] md:h-[500px] bg-cyan-400/20 blur-3xl rounded-full -bottom-40 -right-40 animate-pulse" />
-
+        <div className="absolute w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-blue-400/20 blur-3xl rounded-full -top-20 -left-20 animate-pulse" />
+        <div className="absolute w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-cyan-400/20 blur-3xl rounded-full -bottom-20 -right-20 animate-pulse" />
         <div className="relative z-10 text-center max-w-5xl">
-          <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-gray-900 leading-tight">
-            Travel Smarter Across India
+          <h1 className="text-4xl md:text-7xl font-extrabold text-gray-900 leading-tight tracking-tight">
+            Explore Bihar's Hidden Gems
             <span className="block bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
               Discover Experiences, Not Just Places
             </span>
           </h1>
-
-          <p className="mt-6 md:mt-8 text-base md:text-lg text-gray-600 max-w-3xl mx-auto px-2">
-            AI-powered travel discovery built for explorers who crave authenticity and real experiences.
+          <p className="mt-6 md:mt-8 text-lg md:text-xl text-gray-600 max-w-2xl mx-auto font-medium">
+            AI-powered travel discovery built for explorers who crave authenticity and real experiences across Bihar.
           </p>
-
-          <div className="mt-8 flex flex-col gap-3 md:flex-row md:gap-4 justify-center">
+          <div className="mt-10 flex flex-col gap-3 md:flex-row md:gap-0 justify-center items-center max-w-2xl mx-auto bg-white p-2 rounded-2xl md:rounded-full shadow-2xl border border-gray-100">
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search destinations..."
-              className="w-full md:w-[440px] px-5 py-4 rounded-full border border-gray-200 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white text-base"
+              placeholder="Search for a destination in Bihar"
+              className="w-full md:flex-1 px-6 py-3 rounded-full focus:outline-none bg-transparent text-gray-900 text-lg"
             />
             <button
               onClick={handleSearch}
-              className="w-full md:w-auto px-10 py-4 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold shadow-lg active:scale-95 md:hover:scale-105 transition"
+              className="w-full md:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold shadow-lg hover:shadow-blue-500/30 transition-all transform active:scale-95"
             >
               Explore Now
             </button>
           </div>
-
-          <div className="mt-6 flex flex-wrap justify-center gap-2 md:gap-3">
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <span className="w-full text-sm text-gray-400 mb-1 font-medium">Popular:</span>
             {popularSearch.map(item => (
               <button
                 key={item}
                 onClick={() => router.push(`/destinations/${item}`)}
-                className="px-4 py-2 bg-white/80 backdrop-blur-md border border-gray-200 rounded-full text-sm active:scale-95 md:hover:bg-blue-50 transition"
+                className="px-5 py-2 bg-white border border-gray-200 shadow-sm rounded-full text-sm font-semibold text-gray-700 hover:border-blue-400 hover:text-blue-600 transition-all"
               >
                 {item}
               </button>
@@ -111,91 +102,81 @@ export default function Hero() {
           </div>
         </div>
       </section>
-
-      <section className="py-20 md:py-28 bg-white">
-        <div className="max-w-7xl mx-auto px-5 md:px-6">
-          <div className="text-center mb-10 md:mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-              Featured Experiences
-            </h2>
-            <p className="mt-3 text-gray-600 text-sm md:text-base">
-              Loved by modern travelers
-            </p>
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-5">
+          <div className="flex justify-between items-end mb-12">
+            <div>
+              <h2 className="text-3xl md:text-5xl font-bold text-gray-900">Featured Destinations</h2>
+              <p className="mt-3 text-gray-500 text-lg">Handpicked spots across Bihar</p>
+            </div>
           </div>
-
-          <div className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-4">
-            {featured.map((place) => (
+          <div className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory no-scrollbar pb-8">
+            {featured.map(place => (
               <div
                 key={place.name}
                 onClick={() => router.push(`/destinations/${place.name}`)}
-                className="relative min-w-[320px] md:min-w-0 h-72 md:h-80 rounded-3xl overflow-hidden cursor-pointer group snap-start"
+                className="relative min-w-[300px] md:min-w-0 h-[400px] rounded-[2.5rem] overflow-hidden cursor-pointer group snap-start shadow-xl"
               >
                 <div
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                  style={{ backgroundImage: `url(${place.img})` }}
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-110"
+                  style={{ backgroundImage: `url(${place.image})` }}
                 />
-
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-90 group-hover:opacity-100 transition" />
-
-                <div className="absolute bottom-0 p-5 md:p-6 text-white">
-                  <h3 className="text-xl md:text-2xl font-semibold tracking-wide">
-                    {place.name}
-                  </h3>
-                  <p className="text-sm opacity-80 mt-1">
-                    Explore hidden gems & experiences
-                  </p>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+                <div className="absolute bottom-0 p-8 text-white">
+                  <h3 className="text-2xl font-bold mb-2">{place.name}</h3>
+                  <div className="flex items-center gap-2 text-sm font-medium text-blue-300">
+                    <span>View Experience</span>
+                    <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
       </section>
-
-      <section className="py-20 md:py-28 bg-gradient-to-br from-sky-50 to-blue-100">
-        <div className="max-w-6xl mx-auto px-5 md:px-6 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12 text-center">
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-5 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
           {[
             { value: stats.d, label: "Destinations" },
             { value: stats.t, label: "Travelers" },
             { value: stats.g, label: "Local Guides" },
             { value: (stats.r / 10).toFixed(1), label: "Rating ★" }
           ].map((item, i) => (
-            <div key={i} className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-md">
-              <h3 className="text-2xl md:text-4xl font-bold text-blue-600">{item.value}+</h3>
-              <p className="mt-2 text-gray-600 text-sm md:text-base">{item.label}</p>
+            <div key={i} className="bg-white border border-gray-100 rounded-3xl p-8 shadow-sm text-center">
+              <h3 className="text-3xl md:text-4xl font-black text-blue-600">{item.value}+</h3>
+              <p className="mt-2 text-gray-500 font-bold uppercase tracking-widest text-xs">{item.label}</p>
             </div>
           ))}
         </div>
       </section>
-
-      <section className="py-20 md:py-28 bg-white">
-        <div className="max-w-4xl mx-auto px-5 md:px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-10 md:mb-14">Traveler Stories</h2>
-          <div className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white p-8 md:p-14 rounded-2xl md:rounded-3xl shadow-xl">
-            <p className="text-base md:text-xl">
+      <section className="py-24 bg-white">
+        <div className="max-w-4xl mx-auto px-5 text-center">
+          <h2 className="text-sm font-bold text-blue-600 uppercase tracking-[0.3em] mb-4">Traveler Stories</h2>
+          <div className="relative bg-gray-900 text-white p-10 md:p-20 rounded-[3rem] shadow-2xl overflow-hidden">
+            <div className="absolute top-0 left-0 w-24 h-24 bg-blue-600/20 blur-2xl rounded-full" />
+            <p className="relative z-10 text-xl md:text-3xl font-medium italic leading-relaxed">
               "{testimonials[activeTestimonial].text}"
             </p>
-            <h4 className="mt-5 font-semibold text-sm md:text-lg">
+            <h4 className="relative z-10 mt-8 font-bold text-blue-400 text-lg tracking-wide">
               — {testimonials[activeTestimonial].name}
             </h4>
           </div>
         </div>
       </section>
-
-      <section className="py-24 md:py-32 bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-center px-5">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-5xl font-bold">Your Journey Starts Here</h2>
-          <p className="mt-4 md:mt-6 text-sm md:text-lg opacity-90">
-            Discover destinations powered by insights and real traveler experiences.
+      <section className="py-20 px-5">
+        <div className="max-w-6xl mx-auto relative bg-gradient-to-r from-blue-600 to-cyan-500 rounded-[3rem] p-10 md:p-20 text-center text-white shadow-2xl shadow-blue-200">
+          <h2 className="text-4xl md:text-6xl font-bold mb-6">Your Bihar Journey Starts Here</h2>
+          <p className="text-lg md:text-xl opacity-90 max-w-2xl mx-auto mb-10">
+            Discover destinations powered by insights and real traveler experiences across Bihar.
           </p>
           <button
             onClick={() => router.push("/destinations")}
-            className="mt-8 md:mt-10 w-full md:w-auto px-10 md:px-14 py-4 md:py-5 bg-white text-blue-600 font-semibold rounded-full shadow-lg active:scale-95 md:hover:scale-105 transition"
+            className="px-12 py-5 bg-white text-blue-600 font-bold text-lg rounded-full shadow-xl hover:bg-gray-50 transition-all transform hover:-translate-y-1"
           >
             Explore Destinations
           </button>
         </div>
       </section>
-
     </div>
   )
 }

@@ -5,23 +5,43 @@ import { useState } from "react";
 const initialReviews = [
   {
     id: 1,
-    title: "Goa Trip – Amazing Sunset Views",
+    title: "Bodh Gaya Spiritual Journey",
     rating: 5,
     description:
-      "Discovered a hidden beach near Baga. Less crowded, crystal clear water, and perfect for sunset photography.",
+      "Visiting Mahabodhi Temple was a serene experience. The peaceful ambiance and local guidance made it unforgettable.",
     user: "Aarav Mehta",
-    location: "Goa",
+    location: "Bodh Gaya",
     date: "2 days ago"
   },
   {
     id: 2,
-    title: "Jaipur Heritage Walk",
+    title: "Rajgir Hills Trek",
     rating: 4,
     description:
-      "Local guide explained the royal history beautifully. Hidden rooftop café had the best city view.",
+      "Trekking the hills of Rajgir was amazing! The views from the top and the hot springs were refreshing.",
     user: "Priya Sharma",
-    location: "Jaipur",
+    location: "Rajgir",
     date: "1 week ago"
+  },
+  {
+    id: 3,
+    title: "Patna City Walk",
+    rating: 5,
+    description:
+      "Explored the historic sites of Patna including Golghar and Gandhi Maidan. Loved the street food and local markets.",
+    user: "Rohan Verma",
+    location: "Patna",
+    date: "3 days ago"
+  },
+  {
+    id: 4,
+    title: "Nalanda University Visit",
+    rating: 4,
+    description:
+      "The ruins of Nalanda University are awe-inspiring. Great guided tour and informative storytelling by our local guide.",
+    user: "Meera Kapoor",
+    location: "Nalanda",
+    date: "5 days ago"
   }
 ];
 
@@ -55,11 +75,10 @@ export default function Share() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white">
-
       <div className="relative h-[45vh] sm:h-[55vh] overflow-hidden">
         <img
-          src="/share-hero.jpg"
-          alt="Travel Experience"
+          src="/share-hero-bihar.jpg"
+          alt="Bihar Travel Experience"
           className="w-full h-full object-cover scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-slate-950"></div>
@@ -67,23 +86,19 @@ export default function Share() {
           <h1 className="text-3xl sm:text-5xl font-extrabold leading-tight">
             Share Your
             <span className="block bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-              Travel Story
+              Bihar Travel Story
             </span>
           </h1>
           <p className="mt-4 text-gray-300 max-w-xl">
-            Inspire explorers with authentic experiences and real discoveries.
+            Inspire explorers with authentic experiences and hidden gems across Bihar.
           </p>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-5 sm:px-6 py-14">
-
         <div className="grid lg:grid-cols-2 gap-14 items-start">
-
           <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[32px] p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
-
             <form onSubmit={handleSubmit} className="space-y-8">
-
               <div>
                 <label className="text-sm text-gray-400 mb-2 block">
                   Destination
@@ -95,7 +110,7 @@ export default function Share() {
                     setForm({ ...form, destination: e.target.value })
                   }
                   className="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 focus:border-cyan-400 focus:ring-0 outline-none transition"
-                  placeholder="Where did you travel?"
+                  placeholder="Which Bihar city did you visit?"
                 />
               </div>
 
@@ -111,7 +126,7 @@ export default function Share() {
                     setForm({ ...form, experience: e.target.value })
                   }
                   className="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 focus:border-cyan-400 outline-none resize-none transition"
-                  placeholder="Tell your story..."
+                  placeholder="Tell your Bihar story..."
                 />
                 <div className="text-right text-xs text-gray-500 mt-2">
                   {form.experience.length}/300
@@ -150,7 +165,6 @@ export default function Share() {
               >
                 Publish Experience
               </button>
-
             </form>
           </div>
 
@@ -158,7 +172,6 @@ export default function Share() {
             <h2 className="text-2xl sm:text-3xl font-bold mb-8">
               Community Stories
             </h2>
-
             <div className="space-y-6">
               {reviews.map((review) => (
                 <div
@@ -178,11 +191,9 @@ export default function Share() {
                       {review.date}
                     </span>
                   </div>
-
                   <p className="text-gray-300 text-sm mt-4 leading-relaxed">
                     {review.description}
                   </p>
-
                   <div className="mt-5 flex items-center justify-between text-xs text-gray-500">
                     <span>{review.user}</span>
                     <span>{review.location}</span>
@@ -190,11 +201,8 @@ export default function Share() {
                 </div>
               ))}
             </div>
-
           </div>
-
         </div>
-
       </div>
     </div>
   );

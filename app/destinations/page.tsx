@@ -14,11 +14,11 @@ function DestinationsContent() {
   const [currentImage, setCurrentImage] = useState(0)
 
   const heroImages = [
-    "/destinations-hero.jpg",
-    "/destinations-hero1.jpg",
-    "/destinations-hero2.jpg",
-    "/destinations-hero3.jpg",
-    "/destinations-hero4.jpg",
+    "/destinations/bodh-gaya.webp",
+    "/destinations/patna.jpg",
+    "/destinations/munger.webp",
+    "/destinations/pawapuri.jpg",
+    "/destinations/vikramshila.png",
   ]
 
   useEffect(() => {
