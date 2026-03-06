@@ -17,7 +17,7 @@ export default function Hero() {
     { name: "Rohan Verma", text: "Clean design, powerful discovery engine, love it." }
   ]
 
-  const popularSearch = ["Bodh Gaya", "Rajgir", "Patna", "Nalanda", "Gaya"]
+  const popularSearch = ["Bodh Gaya", "Rajgir", "Patna", "Nalanda"]
 
   const featured = destinations.slice(0, 8)
 

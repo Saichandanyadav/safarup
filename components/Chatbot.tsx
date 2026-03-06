@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { MessageSquare, ArrowUp, X, Send } from "lucide-react"
 
 export default function Chatbot() {
   const [open, setOpen] = useState(false)
@@ -29,9 +30,7 @@ export default function Chatbot() {
     if (open) {
       setVisible(true)
       if (messages.length === 0) {
-        setTimeout(() => {
-          typeMessage("Hi 👋 How can I help you today?")
-        }, 300)
+        setTimeout(() => typeMessage("Hi 👋 How can I help you?"), 300)
       }
     } else {
       const timeout = setTimeout(() => setVisible(false), 300)
@@ -44,10 +43,7 @@ export default function Chatbot() {
   }, [messages])
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 200) setShowScroll(true)
-      else setShowScroll(false)
-    }
+    const handleScroll = () => setShowScroll(window.scrollY > 300)
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
@@ -56,96 +52,68 @@ export default function Chatbot() {
     if (!input.trim()) return
     setMessages(prev => [...prev, { role: "user", text: input }])
     setInput("")
-    setTimeout(() => {
-      typeMessage("Thanks for your message. Our team will assist you shortly.")
-    }, 600)
-  }
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    setTimeout(() => typeMessage("Our team will assist you shortly!"), 600)
   }
 
   return (
     <>
       {visible && (
         <div
-          className={`fixed bottom-0 right-0 w-full h-full md:w-[380px] md:h-[520px] bg-white md:rounded-3xl shadow-2xl flex flex-col overflow-hidden z-50 transition-all duration-300 ${
-            open
-              ? "translate-y-0 opacity-100 scale-100"
-              : "translate-y-10 opacity-0 scale-95"
-          }`}
+          className={`fixed inset-0 z-[100] md:inset-auto md:bottom-24 md:right-6 md:w-[400px] md:h-[600px] bg-white flex flex-col overflow-hidden transition-all duration-300 ${
+            open ? "translate-y-0 opacity-100 scale-100" : "translate-y-10 opacity-0 scale-95"
+          } md:rounded-3xl md:shadow-2xl shadow-none`}
         >
-          <div className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white p-4 flex justify-between items-center">
-            <h3 className="font-semibold text-base">SafarUp Support</h3>
-            <button
-              onClick={() => setOpen(false)}
-              className="text-white text-xl"
-            >
-              ×
+          <div className="bg-gradient-to-r from-blue-600 to-cyan-500 p-6 text-white flex justify-between items-center">
+            <div>
+              <h3 className="text-lg font-bold">SafarUp Support</h3>
+              <p className="text-xs opacity-80">Usually replies in seconds</p>
+            </div>
+            <button onClick={() => setOpen(false)} className="hover:bg-white/20 p-2 rounded-full transition">
+              <X size={24} />
             </button>
           </div>
 
-          <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-gray-50">
+          <div className="flex-1 p-6 overflow-y-auto space-y-4 bg-[#f8faff]">
             {messages.map((msg, i) => (
-              <div
-                key={i}
-                className={`max-w-[85%] px-4 py-2 rounded-2xl text-sm ${
-                  msg.role === "user"
-                    ? "ml-auto bg-blue-600 text-white"
-                    : "bg-white shadow"
-                }`}
-              >
+              <div key={i} className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
+                msg.role === "user" ? "ml-auto bg-blue-600 text-white shadow-md shadow-blue-100" : "bg-white text-gray-800 shadow-sm border border-gray-100"
+              }`}>
                 {msg.text}
               </div>
             ))}
             <div ref={messagesEndRef} />
           </div>
 
-          <div className="p-3 border-t bg-white flex gap-2 md:gap-3">
+          <div className="p-4 bg-white border-t border-gray-100 flex gap-2">
             <input
               value={input}
               onChange={e => setInput(e.target.value)}
-              placeholder="Type a message..."
-              className="flex-1 px-4 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm md:text-base"
+              onKeyPress={e => e.key === 'Enter' && sendMessage()}
+              placeholder="Ask anything..."
+              className="flex-1 bg-gray-100 px-5 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm"
             />
-            <button
-              onClick={sendMessage}
-              className="px-5 py-3 md:px-6 md:py-3 bg-blue-600 text-white rounded-full text-sm md:text-base active:scale-95 transition"
-            >
-              Send
+            <button onClick={sendMessage} className="bg-blue-600 text-white p-3 rounded-2xl hover:bg-blue-700 transition">
+              <Send size={20} />
             </button>
           </div>
         </div>
       )}
 
       {!open && (
-        <div className="fixed bottom-6 right-4 flex flex-col items-center gap-3 z-50">
+        <div className="fixed bottom-24 right-4 flex flex-col items-center gap-3 z-[40] lg:bottom-6">
           {showScroll && (
             <button
-              onClick={scrollToTop}
-              className="w-12 h-12 bg-white text-blue-600 rounded-full shadow-lg flex items-center justify-center active:scale-95 transition"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="w-12 h-12 bg-white text-blue-600 rounded-full shadow-xl flex items-center justify-center border border-gray-100 active:scale-90 transition"
             >
-              ↑
+              <ArrowUp size={20} strokeWidth={3} />
             </button>
           )}
           <button
             onClick={() => setOpen(true)}
-            className="w-16 h-16 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-full shadow-2xl flex items-center justify-center active:scale-95 transition"
+            className="w-16 h-16 bg-blue-600 text-white rounded-2xl shadow-2xl shadow-blue-300 flex items-center justify-center hover:scale-110 active:scale-95 transition-all"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.8}
-              stroke="currentColor"
-              className="w-7 h-7"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M8.625 9.75h6.75M8.625 13.5h4.5M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4.255-.949L3 20l1.186-3.558A7.962 7.962 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-              />
-            </svg>
+            <MessageSquare size={28} />
           </button>
         </div>
       )}

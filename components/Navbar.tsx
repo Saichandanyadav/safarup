@@ -4,124 +4,101 @@ import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
-import { Menu, X } from "lucide-react"
+import { MapPin, Sparkles, Users, BookOpen, Share2, Phone } from "lucide-react"
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener("scroll", handleScroll)
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      setScrolled(currentScrollY > 20)
+      
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false)
+      } else {
+        setIsVisible(true)
+      }
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+  }, [lastScrollY])
 
   const links = [
-    { name: "Destinations", href: "/destinations" },
-    { name: "Hidden Gems", href: "/hidden-gems" },
-    { name: "Connect", href: "/connect" },
-    { name: "Guides", href: "/guides" },
-    { name: "Share", href: "/share" },
-    { name: "Contact", href: "/contact" },
+    { name: "Destinations", href: "/destinations", icon: MapPin },
+    { name: "Gems", href: "/hidden-gems", icon: Sparkles },
+    { name: "Connect", href: "/connect", icon: Users },
+    { name: "Guides", href: "/guides", icon: BookOpen },
+    { name: "Contact", href: "/contact", icon: Phone },
   ]
 
-  const isActive = (href: string) =>
-    pathname === href || pathname.startsWith(href + "/")
+  const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/")
 
   return (
-    <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-white/95 backdrop-blur-xl shadow-lg border-b border-gray-200"
-          : "bg-white/70 backdrop-blur-xl"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-
-        <Link href="/" className="flex items-center gap-3">
-          <Image
-            src="/companyLogo.png"
-            alt="SafarUp Logo"
-            width={42}
-            height={42}
-            className="object-contain"
-          />
-          <span className="text-2xl font-extrabold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-            SafarUp
-          </span>
-        </Link>
-
-        <nav className="hidden lg:flex items-center gap-2">
-
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`relative px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                isActive(link.href)
-                  ? "text-white"
-                  : "text-gray-700 hover:text-black"
-              }`}
-            >
-              {isActive(link.href) && (
-                <span className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full -z-10 shadow-md" />
-              )}
-              {link.name}
-            </Link>
-          ))}
-
-          <Link
-            href="/destinations"
-            className="ml-4 px-6 py-2 rounded-full bg-black text-white text-sm font-semibold hover:scale-105 transition-all duration-300 shadow-md"
-          >
-            Explore
+    <>
+      <header
+        className={`fixed top-0 inset-x-0 z-50 transition-transform duration-300 ${
+          !isVisible ? "-translate-y-full" : "translate-y-0"
+        } ${scrolled ? "bg-white/80 backdrop-blur-md shadow-sm" : "bg-transparent"}`}
+      >
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <Image src="/companyLogo.png" alt="Logo" width={34} height={34} />
+            <span className="text-xl font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+              SafarUp
+            </span>
           </Link>
 
-        </nav>
+          <nav className="hidden lg:flex items-center gap-1">
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`relative px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+                  isActive(link.href) ? "text-white" : "text-gray-600 hover:text-black"
+                }`}
+              >
+                {isActive(link.href) && (
+                  <span className="absolute inset-0 bg-blue-600 rounded-full -z-10 shadow-lg shadow-blue-200" />
+                )}
+                {link.name}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      </header>
 
-        <button
-          onClick={() => setOpen(!open)}
-          className="lg:hidden text-gray-900"
-        >
-          {open ? <X size={28} /> : <Menu size={28} />}
-        </button>
-
-      </div>
-
-      <div
-        className={`lg:hidden overflow-hidden transition-all duration-300 ${
-          open ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+      <nav
+        className={`lg:hidden fixed bottom-0 inset-x-0 z-50 transition-transform duration-300 ${
+          !isVisible ? "translate-y-full" : "translate-y-0"
         }`}
       >
-        <div className="px-6 pb-8 pt-2 bg-white border-t border-gray-100 space-y-3">
-
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setOpen(false)}
-              className={`block px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
-                isActive(link.href)
-                  ? "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-md"
-                  : "text-gray-700 hover:bg-gray-100"
-              }`}
-            >
-              {link.name}
-            </Link>
-          ))}
-
-          <Link
-            href="/destinations"
-            onClick={() => setOpen(false)}
-            className="block text-center mt-4 px-6 py-3 rounded-full bg-black text-white font-semibold shadow-md"
-          >
-            Explore
-          </Link>
-
+        <div className="bg-white border-t border-gray-100 pb-safe-area shadow-[0_-10px_30px_rgba(0,0,0,0.08)] flex items-center justify-around px-2 h-20">
+          {links.map((link) => {
+            const Icon = link.icon
+            const active = isActive(link.href)
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`flex flex-col items-center justify-center flex-1 h-full gap-1 transition-colors ${
+                  active ? "text-blue-600" : "text-gray-400"
+                }`}
+              >
+                <Icon size={22} strokeWidth={active ? 2.5 : 2} />
+                <span className={`text-[10px] font-bold uppercase tracking-wider ${active ? "opacity-100" : "opacity-70"}`}>
+                  {link.name}
+                </span>
+              </Link>
+            )
+          })}
         </div>
-      </div>
-
-    </header>
+      </nav>
+    </>
   )
 }
